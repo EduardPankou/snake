@@ -1,6 +1,7 @@
 import useSnake from "./useSnake";
 import useApple from "./useApple";
 import {APPLE, SNAKE_BLOCK} from "../helpers/constants";
+import {ICoordinates} from "../helpers/types";
 
 export default function useGame() {
   let intervalId = null
@@ -26,10 +27,10 @@ export default function useGame() {
   }
 
   const checkAppleCollisions = (): void => {
-    for (let i = snake.value.length - 1; i >= 0; i--) {
-      const block = snake.value[i];
+    for (let i: number = snake.value.length - 1; i >= 0; i--) {
+      const block: ICoordinates = snake.value[i];
 
-      const isColliding =
+      const isColliding: boolean =
         block.x + SNAKE_BLOCK.WIDTH > apple.value.x &&
         block.x < apple.value.x + APPLE.WIDTH &&
         block.y + SNAKE_BLOCK.HEIGHT > apple.value.y &&
@@ -43,19 +44,20 @@ export default function useGame() {
   }
 
   const checkSnakeCollisions = (): void => {
-    const head = snake.value[0]
-    for (let i = snake.value.length - 1; i >= 1; i--) {
-      const block = snake.value[i];
+    const head: ICoordinates = snake.value[0]
+    for (let i: number = snake.value.length - 1; i >= 1; i--) {
+      const block: ICoordinates = snake.value[i];
 
-      const isColliding =
+      const isColliding: boolean =
+        block.x < head.x + SNAKE_BLOCK.WIDTH &&
         block.x + SNAKE_BLOCK.WIDTH > head.x &&
-        block.x < head.x + APPLE.WIDTH &&
-        block.y + SNAKE_BLOCK.HEIGHT > head.y &&
-        block.y < head.y + APPLE.HEIGHT;
+        block.y < head.y + SNAKE_BLOCK.HEIGHT &&
+        block.y + SNAKE_BLOCK.HEIGHT > head.y;
 
       if (isColliding) {
         resetApple()
         resetSnake()
+        break;
       }
     }
   }
